@@ -1,0 +1,150 @@
+#include <iostream>
+#include <fstream>
+#include <math.h>
+
+using namespace std;
+
+string bin[500];
+
+int dlugosc=0,dzies=0;
+
+
+void wczytaj(string bin[500])
+{
+    ifstream binarne("binarne.txt");
+
+    for(int i = 0;i<500;i++)
+            binarne>>bin[i];
+
+    binarne.close();
+}
+
+bool czydwu(string biny)
+{
+    int l=biny.length()/2;
+    bool czy=true;
+
+    for(int i=0;i<l;i++)
+    {
+
+        if(biny[i]!=biny[i+l])
+        {
+            czy=false;
+            break;
+        }
+    }
+
+
+    return czy;;
+
+}
+
+
+bool poprawne(string biny)
+{
+    bool pop=true;
+    int done[4];
+
+    for(int i=0; i<biny.length()/4; i=i+4)
+    {
+        for(int j=0; j<4;j++)
+        {
+            if(biny[i+j]=='1')
+                done[j]=1;
+            else
+                done[j]=0;
+
+        }
+        cout<<done[0]*8+done[1]*4+done[2]*2+done[3]<<" "<<done[0]<<done[1]<<done[2]<<done[3]<<endl;
+        if(9<done[0]*8+done[1]*4+done[2]*2+done[3])
+        {
+           cout<<"up..........................up...........................up"<<endl;
+            pop=false;
+            break;
+        }
+    }
+
+     return pop;
+
+}
+
+int drugi(string bin[500], int &dlugosc)
+{
+    int liczba=0;
+
+    bool first=true;
+
+    for(int i = 0;i<500;i++)
+    {
+        cout<<"i:"<<i<<endl;
+
+        if(!poprawne(bin[i]))
+        {
+            if(first)
+            {
+                dlugosc=bin[i].length();
+                first=false;
+            }
+            else if(dlugosc>bin[i].length())
+                dlugosc=bin[i].length();
+            cout<<"dlugosc"<<dlugosc<<endl;
+            liczba++;
+
+            //cout<<liczba<<endl;
+        }
+    }
+    return liczba;
+
+}
+
+int najwieksza(string bin[500], int &dzies)
+{
+    int najw=0;
+    int najwi=0;
+
+    for(int i = 0;i<500;i++)
+    {
+        int suma=0;
+        for(int j = 0;j<bin[i].length();j++)
+            if(bin[i][j]=='1')
+                suma=suma+pow(2,(bin[i].length()-j));
+        if(suma<=65535)
+            if(suma>najw)
+            {
+                najw=suma;
+                dzies=suma;
+                najwi=i;
+            }
+    }
+    return najw;
+}
+
+int main()
+{
+    ofstream wyniki("zadanie4.txt");
+
+    wczytaj(bin);
+
+    int dwucykliczny =0;
+    int maxIndex=0;
+    for(int i = 0;i<500;i++)
+    {
+        if(czydwu(bin[i]))
+        {
+            dwucykliczny++;
+            if(bin[i].length()>bin[maxIndex].length())
+                maxIndex=i;
+        }
+    }
+
+
+    wyniki<<"Liczba dwucyklicznych to:"<<dwucykliczny<<endl;
+    wyniki<<"Maksymalny index to:"<<bin[maxIndex].length()<<endl;
+    wyniki<<"Najdluzsza linia to:"<<bin[maxIndex]<<endl;
+    wyniki<<"Liczba niepoprawnych napisow to:"<< drugi(bin,dlugosc)<<endl;
+    wyniki<<"Dlugosc najkrotszej linii niepoprawnej to:"<<dlugosc<<endl;
+    wyniki<<"Najwieksza liczba to:"<<najwieksza(bin,dzies)<<" ,czyli: "<<dzies<<endl;
+    wyniki.close();
+
+    return 0;
+}
