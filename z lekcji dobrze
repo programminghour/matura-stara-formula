@@ -1,0 +1,47 @@
+int zamiana(string s)
+{
+    return ((int)s[3]-48)+((int)s[2]-48)*2+((int)s[1]-48)*4+((int)s[0]-48)*8;
+}
+
+bool czypoprawny(string s)
+{
+    for(int i=0;i<s.length();i=i+4)
+    {
+        if(zamiana(s.substr(i,4))>9)
+            return false;
+    }
+    return true;
+}
+
+
+
+int main()
+{
+    ofstream wyniki("zadanie4.txt");
+
+    wczytaj(bin);
+
+    int dwucykliczny =0;
+    int maxIndex=0;
+    for(int i = 0;i<500;i++)
+    {
+        if(czydwu(bin[i]))
+        {
+            dwucykliczny++;
+            if(bin[i].length()>bin[maxIndex].length())
+                maxIndex=i;
+        }
+    }
+
+
+    wyniki<<"Liczba dwucyklicznych to:"<<dwucykliczny<<endl;
+    wyniki<<"Maksymalny index to:"<<bin[maxIndex].length()<<endl;
+    wyniki<<"Najdluzsza linia to:"<<bin[maxIndex]<<endl;
+    wyniki<<"Liczba niepoprawnych napisow to:"<< drugi(bin,dlugosc)<<endl;
+    wyniki<<"Dlugosc najkrotszej linii niepoprawnej to:"<<dlugosc<<endl;
+    wyniki<<"Najwieksza liczba to:"<<najwieksza(bin,dzies)<<" ,czyli: "<<dzies<<endl;
+    cout<<zamiana("0011");
+    wyniki.close();
+
+    return 0;
+}
